@@ -11,6 +11,7 @@ export const AuthContext = createContext({
 export function AuthProvider(props) {
     const { children } = props
     const [repuestos, setRepuestos] = useState(null)
+    const [auth, setAuth] = useState(undefined)
 
     //Peticion a la API de Amazon
     const url = 'https://real-time-amazon-data.p.rapidapi.com/search?query=Repuestos%20carros%20y%20motos&page=1&country=US&category_id=aps';
@@ -22,20 +23,25 @@ export function AuthProvider(props) {
         }
     };
 
-    useEffect(() => {
-        try {
-            fetch(url, options)
-                .then(response => response.json())
-                .then(data => setRepuestos(data))
-        } catch (error) {
-            console.error(error);
-        }
-    }, [])
+    // useEffect(() => {
+    //     try {
+    //         fetch(url, options)
+    //             .then(response => response.json())
+    //             .then(data => setRepuestos(data))
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }, [])
 
+    const login = (dataUser) => {
+        setAuth(dataUser)
+    }
 
-
+    const logout = () => {
+        setAuth(undefined)
+    }
     return (
-        <AuthContext.Provider value={{ repuestos }}>
+        <AuthContext.Provider value={{ auth, login, logout, repuestos }}>
             {children}
         </AuthContext.Provider>
     )
