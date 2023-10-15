@@ -29,7 +29,10 @@ const LogIn = () => {
     return (
         <View style={styles.container}>
             <View style={styles.loginForm}>
-                <Text style={styles.loginFormTitulo}>Login</Text>
+                <View style={styles.titul_LogoCon}>
+                    <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/49/49207.png' }} style={styles.logo} />
+                    <Text style={styles.loginFormTitulo}>Login</Text>
+                </View>
                 <TextInput
                     placeholder='Usuario'
                     placeholderTextColor={'white'}
@@ -101,10 +104,19 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         padding: 30
     },
+    titul_LogoCon: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    logo: {
+        width: 100,
+        height: 100,
+        marginRight: 20
+    },
     loginFormTitulo: {
         fontSize: 40,
         paddingBottom: 30,
-        color: '#22C55E',
+        color: 'yellow',
         fontWeight: '700'
     },
     loginFormInput: {
