@@ -1,15 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableHighlight, Image } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import useAuth from '../hooks/useAuth'
-import { datosUser, detallesUser } from '../util/datosUser'
+import { obtenerUsuario, eliminarAlmacenamiento } from '../storage/usuarios'
 
 const LogIn = () => {
     const [error, setError] = useState(null)
+    const [users, setUsers] = useState(null)
     const { login } = useAuth()
     const navegacion = useNavigation()
+
+    useFocusEffect(
+        useCallback(() => {
+            (async () => {
+                const response = await obtenerUsuario()
+                setUsers(response)
+            })()
+        }, [])
+    )
 
     const formik = useFormik({
         initialValues: initialValues(),
@@ -18,11 +28,14 @@ const LogIn = () => {
         onSubmit: (form) => {
             setError("")
             const { usuario, contraseña } = form
-            if (usuario !== datosUser.nombreUsuario || contraseña !== datosUser.contraseña) {
-                setError('Usuario o contraseña incorrectos')
-            } else {
-                login(detallesUser)
-            }
+            users.find((user) => {
+                if (user.nombreUsuario === usuario && user.contraseña === contraseña) {
+                    console.log(user);
+                    login(user)
+                } else {
+                    setError("Usuario o contraseña incorrectos")
+                }
+            })
         }
     })
 
@@ -107,6 +120,7 @@ const styles = StyleSheet.create({
     titul_LogoCon: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 20
     },
     logo: {
         width: 100,

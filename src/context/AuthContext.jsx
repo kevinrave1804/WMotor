@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { API_KEY_AMAZON_REPUESTOS } from '../util/constantes'
 
 export const AuthContext = createContext({
     auth: undefined,
     login: () => { },
     logout: () => { },
-    repuestos: undefined
+    repuestos: undefined,
 })
 
 export function AuthProvider(props) {
@@ -18,7 +18,7 @@ export function AuthProvider(props) {
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': '1e26af7148mshe6e83c523034fd7p1be747jsn1f5a2844fe91',
+            'X-RapidAPI-Key': API_KEY_AMAZON_REPUESTOS,
             'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
         }
     };

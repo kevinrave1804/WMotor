@@ -1,18 +1,43 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Text, StyleSheet, View, TextInput, TouchableHighlight } from 'react-native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { eliminarAlmacenamiento, guardarUsuario } from '../../storage/usuarios'
+import useAuth from '../../hooks/useAuth'
 
 const SignIn = () => {
+    const { login } = useAuth()
+    const [users, setUsers] = useState(null)
+    const navegacion = useNavigation()
+
+    const añadirUsuario = async (user) => {
+        await guardarUsuario(user)
+    }
+
     const formik = useFormik({
         initialValues: initialValues(),
         validationSchema: Yup.object(validationScheme()),
         validateOnChange: false,
         onSubmit: (form) => {
-            const { nombre, apellido, nombreUsuario, correo, contraseña } = form
-            console.log('Excelente');
+            const { nombre, apellidos, nombreUsuario, correo, contraseña } = form
+            const usuarioInfo = {
+                nombre,
+                apellidos,
+                nombreUsuario,
+                correo,
+                contraseña
+            }
+            añadirUsuario(usuarioInfo)
+            login(usuarioInfo)
         }
     })
+
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         guardarUsuario(users)
+    //     }, [users])
+    // )
 
     return (
         <View style={styles.RegistroCon}>
@@ -30,7 +55,7 @@ const SignIn = () => {
                     placeholderTextColor={'white'}
                     autoCapitalize='none'
                     value={formik.values.apellido}
-                    onChangeText={(text) => formik.setFieldValue('apellido', text)}
+                    onChangeText={(text) => formik.setFieldValue('apellidos', text)}
                     style={styles.input} />
                 <TextInput
                     placeholder="Nombre de usuario"
@@ -65,7 +90,7 @@ const SignIn = () => {
 function initialValues() {
     return {
         nombre: "",
-        apellido: "",
+        apellidos: "",
         nombreUsuario: "",
         correo: "",
         contraseña: "",
@@ -75,7 +100,7 @@ function initialValues() {
 function validationScheme() {
     return {
         nombre: Yup.string().required("El nombre es obligatorio"),
-        apellido: Yup.string().required("El apellido es obligatorio"),
+        apellidos: Yup.string().required("El apellido es obligatorio"),
         nombreUsuario: Yup.string().required("El usuario es obligatorio"),
         correo: Yup.string().required("El correo es obligatorio"),
         contraseña: Yup.string().required("La contraseña es obligatoria"),
@@ -109,6 +134,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         width: 300,
+        padding: 10
     }
 })
 
