@@ -16,7 +16,7 @@ const IconsHeaderRight = () => {
     const { auth } = useAuth()
     return (
         <View style={styles.IconHeaderRight}>
-            <Icon name='shopping-cart' color='#000' size={25} style={{ marginRight: 30 }} onPress={() => console.log('Carrito')} />
+            <Icon name='shopping-cart' color='#000' size={25} style={{ marginRight: 30 }} onPress={() => navegacion.navigate('Carrito')} />
             <TouchableHighlight onPress={() => navegacion.navigate('CuentaUser')}>
                 <Image source={{ uri: `https://ui-avatars.com/api/?name=${auth.nombre}+${auth.apellidos}` }} style={{ width: 30, height: 30, borderRadius: 100 }} />
             </TouchableHighlight>
