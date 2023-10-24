@@ -26,7 +26,6 @@ const Carrito = () => {
     }
     return (
         <View style={styles.contenedor}>
-            <Text>Hola mundo</Text>
             <Button title='Obtener productos' onPress={obtenerProductos} />
             <Button title='Eliminar productos' onPress={eliminarProductos} />
         </View>

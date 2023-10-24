@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { includes } from 'lodash'
+import { includes } from 'lodash';
 import { CARRITO } from "../util/constantes";
 
 export async function obtenerProductosCarrito(nombreUsuario) {
@@ -14,9 +14,11 @@ export async function obtenerProductosCarrito(nombreUsuario) {
 export async function guardarProductoCarrito(nombreUsuario, producto) {
     try {
         const productosCarrito = await obtenerProductosCarrito(nombreUsuario)
-        if (!includes(productosCarrito, producto)) {
+
+        if (productosCarrito.includes(producto)) {
+            console.log("Hola mundo")
             console.log('El producto ya existe en el carrito');
-            return
+
         } else {
             productosCarrito.push(producto)
             await AsyncStorage.setItem(`${nombreUsuario}${CARRITO}`, JSON.stringify(productosCarrito))
