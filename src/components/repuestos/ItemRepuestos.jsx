@@ -1,20 +1,40 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { View, Text, Image, StyleSheet } from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome5"
-import { guardarProductoCarrito } from "../../storage/carrito"
+import { guardarProductoCarrito, verificarProductoCarrito } from "../../storage/carrito"
 import useAuth from "../../hooks/useAuth"
 
 const ItemRepuestos = ({ producto }) => {
+    const [productoCarrito, setProductoCarrito] = useState(null)
+    const [reload, setReload] = useState(false)
     const { auth } = useAuth()
     const { id, product_title, product_price, product_photo } = producto
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await verificarProductoCarrito(auth.nombreUsuario, producto)
+                setProductoCarrito(response)
+            } catch (error) {
+                setProductoCarrito(false)
+            }
+        })()
+    }, [producto, reload])
+
+    const reloadCheck = () => {
+        setReload(prev => !prev)
+    }
 
     const guardarProducto = async () => {
         try {
             await guardarProductoCarrito(auth.nombreUsuario, producto)
+            reloadCheck()
+            console.log(id);
         } catch (error) {
             console.error(error);
         }
     }
+
 
     return (
         <View style={{ flexDirection: 'row', padding: 10 }}>
@@ -24,7 +44,7 @@ const ItemRepuestos = ({ producto }) => {
                 <View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={styles.precio}>Price:{product_price}</Text>
-                        <Icon name='shopping-cart' color='#22C55E' size={25} style={{ marginLeft: 30 }} onPress={guardarProducto} />
+                        <Icon name='shopping-cart' color={productoCarrito ? '#22C55E' : '#000'} size={25} style={{ marginLeft: 30 }} onPress={guardarProducto} />
                     </View>
                 </View>
             </View>

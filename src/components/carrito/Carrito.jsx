@@ -1,33 +1,30 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, FlatList, Text, Button } from 'react-native'
-import { obtenerProductosCarrito, eliminarProductoCarrito } from '../../storage/carrito'
+import { obtenerProductosCarrito, eliminarProductos } from '../../storage/carrito'
 import useAuth from '../../hooks/useAuth'
-import ProductoCar from './ProductoCar'
+import { ItemRepuestos } from '../repuestos/ItemRepuestos'
 
 const Carrito = () => {
+    const [productosCarrito, setProductosCarrito] = useState([])
     const { auth } = useAuth()
-    const nombreUsuario = auth.nombreUsuario
 
-    const obtenerProductos = async () => {
-        try {
-            const response = await obtenerProductosCarrito(nombreUsuario)
-            console.log(response)
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await obtenerProductosCarrito(auth.nombreUsuario)
+                setProductosCarrito(response)
+            } catch (error) {
+                console.log(error);
+            }
+        })()
+    }, [auth])
 
-    const eliminarProductos = async () => {
-        try {
-            await eliminarProductoCarrito(nombreUsuario)
-        } catch (error) {
-            console.error(error);
-        }
-    }
     return (
         <View style={styles.contenedor}>
-            <Button title='Obtener productos' onPress={obtenerProductos} />
-            <Button title='Eliminar productos' onPress={eliminarProductos} />
+            <FlatList
+                data={productosCarrito}
+                numColumns={2}
+                renderItem={({ item }) => <ItemRepuestos producto={item} />} />
         </View>
     )
 }

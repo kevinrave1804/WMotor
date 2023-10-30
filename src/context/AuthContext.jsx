@@ -23,15 +23,15 @@ export function AuthProvider(props) {
         }
     };
 
-    // useEffect(() => {
-    //     try {
-    //         fetch(url, options)
-    //             .then(response => response.json())
-    //             .then(data => setRepuestos(data))
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }, [])
+    useEffect(() => {
+        try {
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => setRepuestos(data))
+        } catch (error) {
+            console.error(error);
+        }
+    }, [])
 
     const login = (dataUser) => {
         setAuth(dataUser)
