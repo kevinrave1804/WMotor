@@ -15,7 +15,7 @@ export async function guardarProductoCarrito(nombreUsuario, producto) {
     try {
         const productosCarrito = await obtenerProductosCarrito(nombreUsuario)
         const idProductosCarrito = productosCarrito.map((item) => { return item.id })
-        if (!includes(idProductosCarrito, producto.id)) {
+        if (!includes(idProductosCarrito, producto.asin)) {
             productosCarrito.push(producto)
             await AsyncStorage.setItem(`${nombreUsuario}${CARRITO}`, JSON.stringify(productosCarrito))
             console.log("Producto agregado");
@@ -30,8 +30,8 @@ export async function guardarProductoCarrito(nombreUsuario, producto) {
 export async function verificarProductoCarrito(nombreUsuario, producto) {
     try {
         const productosCarrito = await obtenerProductosCarrito(nombreUsuario)
-        const idProductosCarrito = productosCarrito.map((item) => { return item.id })
-        return includes(idProductosCarrito, producto.id)
+        const idProductosCarrito = productosCarrito.map((item) => { return item.asin })
+        return includes(idProductosCarrito, producto.asin)
     } catch (error) {
         console.error(error);
     }

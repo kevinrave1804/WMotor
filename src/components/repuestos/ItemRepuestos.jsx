@@ -8,7 +8,7 @@ const ItemRepuestos = ({ producto }) => {
     const [productoCarrito, setProductoCarrito] = useState(null)
     const [reload, setReload] = useState(false)
     const { auth } = useAuth()
-    const { id, product_title, product_price, product_photo } = producto
+    const { asin, product_title, product_price, product_photo } = producto
 
     useEffect(() => {
         (async () => {
@@ -29,7 +29,7 @@ const ItemRepuestos = ({ producto }) => {
         try {
             await guardarProductoCarrito(auth.nombreUsuario, producto)
             reloadCheck()
-            console.log(id);
+            console.log(asin);
         } catch (error) {
             console.error(error);
         }
